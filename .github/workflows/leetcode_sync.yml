@@ -3,15 +3,22 @@ name: Sync LeetCode
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Runs automatically every day at midnight
+    - cron: "0 0 * * *"
+
+# Allows the action to commit synced solutions
+permissions:
+  contents: write
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Run LeetCode Sync
-        uses: jasonwryan/leetcode-sync@v2.0.0
+      - name: Sync LeetCode submissions
+        uses: joshcai/leetcode-sync@v1.7
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          leetcode_session: ${{ secrets.LEETCODE_SESSION }}
-          leetcode_csrf_token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          github-token: ${{ github.token }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: .
+          verbose: true
